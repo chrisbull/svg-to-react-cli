@@ -21,12 +21,18 @@ const generateComponent = require('./src/generateComponent');
 const printErrors = require('./src/output').printErrors;
 const removeStyle = require('./src/removeStyle');
 const replaceAllStrings = require('./src/replaceAllStrings');
+const replaceFill = require('./src/replaceFill');
+const replaceStroke = require('./src/replaceStroke');
+const replaceWidthHeight = require('./src/replaceWidthHeight');
 
 // Argument setup
 const args = yargs
   .option('dir', { alias: 'd', default: false })
   .option('format', { default: true })
   .option('output', { alias: 'o' })
+  .option('fillProp', { type: 'boolean', default: true })
+  .option('strokeProp', { type: 'boolean', default: true })
+  .option('widthHeightProp', { type: 'boolean', default: true })
   .option('rm-style', { default: false })
   .option('force', { alias: 'f', default: false }).argv;
 
@@ -35,6 +41,9 @@ const firstArg = args._[0];
 const newFileName = args._[1] || 'MyComponent';
 const outputPath = args.output;
 const directoryPath = args.dir;
+const fillProp = args.fillProp;
+const strokeProp = args.strokeProp;
+const widthHeightProp = args.widthHeightProp;
 const rmStyle = args.rmStyle;
 const format = args.format;
 
@@ -132,6 +141,21 @@ const runUtil = (fileToRead, fileToWrite) => {
       SVGtoJSX(output).then(jsx => {
         // Convert any html tags to react-native-svg tags
         jsx = replaceAllStrings(jsx);
+        
+        // replace Fill
+        if (fillProp) {
+          jsx = replaceFill(jsx);
+        }
+        
+        // replace Stroke
+        if (strokeProp) {
+          jsx = replaceStroke(jsx);
+        }
+        
+        // replace widthHeightProp
+        if (widthHeightProp) {
+          jsx = replaceWidthHeight(jsx);
+        }
 
         // Wrap it up in a React component
         jsx = generateComponent(jsx, fileToWrite);

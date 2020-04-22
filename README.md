@@ -1,3 +1,5 @@
+Forked from chrisbull/svg-to-react-native-cli and added options to override width, height, fill and stroke of the compiled SVG.
+
 # svg-to-react-native-cli
 Based on svg-to-react-cli.
 A command line utility that takes a svg image file and outputs a fully formatted stateless functional React Native component with `height` and `width` for props. With flags to toggle formatting and remove style attributes.
